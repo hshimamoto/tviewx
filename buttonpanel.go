@@ -37,8 +37,9 @@ func (bp *ButtonPanel)AddButton(label string) *ButtonPanel {
     return bp
 }
 
-func (bp *ButtonPanel)SetSelectedFunc(selected func(b *tview.Button)) {
+func (bp *ButtonPanel)SetSelectedFunc(selected func(b *tview.Button)) *ButtonPanel {
     bp.selected = selected
+    return bp
 }
 
 func (bp *ButtonPanel)Draw(scr tcell.Screen) {
