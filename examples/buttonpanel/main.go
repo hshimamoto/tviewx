@@ -15,7 +15,7 @@ func main() {
     bp.AddButton("Button2")
     bp.AddButton("Button3")
     bp.AddButton("Button4")
-    bp.SetSelectedFunc(func(b *tview.Button) {
+    bp.SetSelectedFunc(func(b *tviewx.Button) {
 	label.SetText(b.GetLabel())
     })
     flex := tview.NewFlex().SetDirection(tview.FlexRow)

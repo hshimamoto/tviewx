@@ -10,10 +10,10 @@ import (
 
 type ButtonPanel struct {
     *tview.Box
-    buttons []*tview.Button
+    buttons []*Button
     hasFocus bool
     focusedButton int
-    selected func(*tview.Button)
+    selected func(*Button)
 }
 
 func NewButtonPanel() *ButtonPanel {
@@ -26,7 +26,7 @@ func NewButtonPanel() *ButtonPanel {
 }
 
 func (bp *ButtonPanel)AddButton(label string) *ButtonPanel {
-    b := tview.NewButton(label)
+    b := NewButton(label)
     selected := func() {
 	if bp.selected != nil {
 	    bp.selected(b)
@@ -37,7 +37,7 @@ func (bp *ButtonPanel)AddButton(label string) *ButtonPanel {
     return bp
 }
 
-func (bp *ButtonPanel)SetSelectedFunc(selected func(b *tview.Button)) *ButtonPanel {
+func (bp *ButtonPanel)SetSelectedFunc(selected func(b *Button)) *ButtonPanel {
     bp.selected = selected
     return bp
 }
