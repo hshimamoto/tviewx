@@ -42,6 +42,17 @@ func (bp *ButtonPanel)SetSelectedFunc(selected func(b *Button)) *ButtonPanel {
     return bp
 }
 
+func (bp *ButtonPanel)GetCurrentIndex() int {
+    return bp.focusedButton
+}
+
+func (bp *ButtonPanel)SetCurrentIndex(index int) {
+    if index < 0 || index >= len(bp.buttons) {
+	index = -1
+    }
+    bp.focusedButton = index
+}
+
 func (bp *ButtonPanel)Draw(scr tcell.Screen) {
     bp.Box.Draw(scr)
     x, y, w, _ := bp.GetInnerRect()
