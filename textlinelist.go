@@ -169,7 +169,7 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
 	    if tl.open {
 		cursor = "V"
 	    }
-	    tview.Print(scr, cursor, x-1, y, 1, tview.AlignRight, tview.Styles.PrimaryTextColor)
+	    PrintR(scr, cursor, x-1, y, 1)
 	}
 	item.SetRect(x, y, w, 1)
 	item.Draw(scr)
@@ -180,10 +180,10 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     }
     // scroll bar
     if tl.drawst > 0 {
-	tview.Print(scr, "^", w+1, 0, 1, tview.AlignRight, tview.Styles.PrimaryTextColor)
+	PrintR(scr, "^", w+1, 0, 1)
     }
     if tl.drawst <= tl.last - h {
-	tview.Print(scr, "V", w+1, h-1, 1, tview.AlignRight, tview.Styles.PrimaryTextColor)
+	PrintR(scr, "V", w+1, h-1, 1)
     }
     // menu buttons
     x--
