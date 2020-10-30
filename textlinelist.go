@@ -68,6 +68,13 @@ func (tl *TextLineList)AddItem(item *TextLineListItem) *TextLineList {
     return tl
 }
 
+func (tl *TextLineList)GetItem(index int) *TextLineListItem {
+    if index < 0 || index > tl.last {
+	return nil
+    }
+    return tl.items[index]
+}
+
 func (tl *TextLineList)OpenMenu() {
     tl.open = true
     tl.items[tl.cur].menu.SetCurrentIndex(0)
