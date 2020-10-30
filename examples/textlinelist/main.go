@@ -32,7 +32,7 @@ func main() {
 	it.AddButton(rtext(15))
 	it.AddButton(rtext(15))
 	it.SetSelectedFunc(func(b *tviewx.Button) {
-	    it.GetItem(0).SetText(b.GetLabel())
+	    it.ReplaceItem(0, b.GetLabel())
 	    list.CloseMenu()
 	})
 	return it

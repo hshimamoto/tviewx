@@ -44,6 +44,21 @@ func (t *TextLine)GetItem(index int) *tview.TextView {
     return t.items[index].TextView
 }
 
+func (t *TextLine)ReplaceItem(index int, text string) *TextLine {
+    if index < 0 || index >= len(t.items) {
+	return t
+    }
+    t.items[index].TextView.SetText(text)
+    return t
+}
+
+func (t *TextLine)ReplaceItems(index int, texts []string) *TextLine {
+    for i, text := range texts {
+	t.ReplaceItem(index + i, text)
+    }
+    return t
+}
+
 func (t *TextLine)SetTextColor(color tcell.Color) *TextLine {
     t.textcolor = color
     return t
