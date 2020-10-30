@@ -101,6 +101,10 @@ func (tl *TextLineList)CursorBottom() {
 
 func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(p tview.Primitive)) {
     return tl.WrapInputHandler(func(event *tcell.EventKey, setFocus func(p tview.Primitive)) {
+	if len(tl.items) == 0 {
+	    // nothing to do if there is no item
+	    return
+	}
 	prevopen := tl.open
 	defer func() {
 	    if tl.open != prevopen {
@@ -149,6 +153,10 @@ func (tl *TextLineList)HasFocus() bool {
 
 func (tl *TextLineList)Draw(scr tcell.Screen) {
     tl.Box.Draw(scr)
+    if len(tl.items) == 0 {
+	// no items
+	return
+    }
     x, y, w, h := tl.GetInnerRect()
     x += 1
     w -= 2 // for cursor and scroll bar
