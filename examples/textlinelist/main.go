@@ -37,6 +37,13 @@ func main() {
 	})
 	return it
     }
+    hdr := tviewx.NewTextLine()
+    hdr.AddText("Header0", 20)
+    hdr.AddText("Header1", 10)
+    hdr.AddText("Header2", 10)
+    hdr.AddText("Header3", 20)
+    hdr.AddText("Header4", 20)
+    list.SetHeader(hdr)
     for i := 0; i < 20; i++ {
 	it := create()
 	list.AddItem(it)

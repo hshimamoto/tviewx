@@ -45,6 +45,7 @@ func (ti *TextLineListItem)SetSelectedFunc(selected func(b *Button)) *TextLineLi
 
 type TextLineList struct {
     *tview.Box
+    header *TextLine
     items []*TextLineListItem
     cur, last int
     drawst int
@@ -59,6 +60,15 @@ func NewTextLineList() *TextLineList {
     tl.last = -1
     tl.drawst = 0
     tl.open = false
+    return tl
+}
+
+func (tl *TextLineList)GetHeader() *TextLine {
+    return tl.header
+}
+
+func (tl *TextLineList)SetHeader(header *TextLine) *TextLineList {
+    tl.header = header
     return tl
 }
 
@@ -168,11 +178,20 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     x += 1
     w -= 2 // for cursor and scroll bar
     h -= 1 // for button
+    hdr := 0
+    if tl.header != nil {
+	// draw header here
+	tl.header.SetRect(x, y, w, 1)
+	tl.header.Draw(scr)
+	y += 1
+	hdr = 1
+    }
+    top := y
     // check lines for draw
     if tl.cur < tl.drawst {
 	tl.drawst = tl.cur
-    } else if tl.cur >= tl.drawst + h - 1 {
-	tl.drawst = tl.cur - h + 1
+    } else if tl.cur >= tl.drawst + (h - hdr) - 1 {
+	tl.drawst = tl.cur - (h - hdr) + 1
     }
     for i, item := range tl.items {
 	if i < tl.drawst {
@@ -195,9 +214,9 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     }
     // scroll bar
     if tl.drawst > 0 {
-	PrintR(scr, "^", w+1, 0, 1)
+	PrintR(scr, "^", w+1, top, 1)
     }
-    if tl.drawst <= tl.last - h {
+    if tl.drawst <= tl.last - (h - hdr) {
 	PrintR(scr, "V", w+1, h-1, 1)
     }
     // menu buttons
