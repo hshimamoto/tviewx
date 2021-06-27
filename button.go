@@ -1,10 +1,10 @@
 // tviewx.ButtonPanel
-// MIT License Copyright(c) 2020 Hiroshi Shimamoto
+// MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package tviewx
 
 import (
-    "github.com/gdamore/tcell"
+    "github.com/gdamore/tcell/v2"
     "github.com/rivo/tview"
 )
 

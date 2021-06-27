@@ -1,10 +1,10 @@
 // tviewx.ButtonPanel
-// MIT License Copyright(c) 2020 Hiroshi Shimamoto
+// MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package tviewx
 
 import (
-    "github.com/gdamore/tcell"
+    "github.com/gdamore/tcell/v2"
     "github.com/rivo/tview"
 )
 
@@ -114,7 +114,7 @@ func (bp *ButtonPanel)HasFocus() bool {
 func (bp *ButtonPanel)InputHandler() func(event *tcell.EventKey, setFocus func(p tview.Primitive)) {
     return bp.WrapInputHandler(func(event *tcell.EventKey, setFocus func(p tview.Primitive)) {
 	for _, b := range bp.buttons {
-	    if b.GetFocusable().HasFocus() {
+	    if b.HasFocus() {
 		if handler := b.InputHandler(); handler != nil {
 		    handler(event, setFocus)
 		    return
@@ -122,8 +122,4 @@ func (bp *ButtonPanel)InputHandler() func(event *tcell.EventKey, setFocus func(p
 	    }
 	}
     })
-}
-
-func (bp *ButtonPanel)GetFocusable() tview.Focusable {
-    return bp
 }

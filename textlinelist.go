@@ -1,10 +1,10 @@
 // tviewx.TextLineList
-// MIT License Copyright(c) 2020 Hiroshi Shimamoto
+// MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package tviewx
 
 import (
-    "github.com/gdamore/tcell"
+    "github.com/gdamore/tcell/v2"
     "github.com/rivo/tview"
 )
 
@@ -158,10 +158,6 @@ func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(
 	case 'G': tl.CursorBottom()
 	}
     })
-}
-
-func (tl *TextLineList)GetFocusable() tview.Focusable {
-    return tl
 }
 
 func (tl *TextLineList)HasFocus() bool {

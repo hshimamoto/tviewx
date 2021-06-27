@@ -1,8 +1,8 @@
 module github.com/hshimamoto/tviewx
 
-go 1.15
+go 1.16
 
 require (
-	github.com/gdamore/tcell v1.3.0
-	github.com/rivo/tview v0.0.0-20200915114512-42866ecf6ca6
+	github.com/gdamore/tcell/v2 v2.3.11
+	github.com/rivo/tview v0.0.0-20210624165335-29d673af0ce2
 )
