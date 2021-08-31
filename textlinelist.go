@@ -50,6 +50,8 @@ type TextLineList struct {
     cur, last int
     drawst int
     open bool
+    hasFocus bool
+    blurFunc func(tcell.Key)
 }
 
 func NewTextLineList() *TextLineList {
@@ -60,6 +62,8 @@ func NewTextLineList() *TextLineList {
     tl.last = -1
     tl.drawst = 0
     tl.open = false
+    tl.hasFocus = false
+    tl.blurFunc = func(tcell.Key){}
     return tl
 }
 
@@ -149,6 +153,9 @@ func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(
 	case tcell.KeyDown: tl.CursorDown()
 	case tcell.KeyHome: tl.CursorTop()
 	case tcell.KeyEnd: tl.CursorBottom()
+	case tcell.KeyEscape:
+	    tl.hasFocus = false
+	    tl.blurFunc(tcell.KeyEscape)
 	}
 	switch event.Rune() {
 	case ' ': tl.OpenMenu()
@@ -160,8 +167,20 @@ func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(
     })
 }
 
+func (tl *TextLineList)Focus(delegate func(tview.Primitive)) {
+    tl.hasFocus = true
+}
+
 func (tl *TextLineList)HasFocus() bool {
-    return true
+    return tl.hasFocus
+}
+
+func (tl *TextLineList)SetBlurFunc(handler func(tcell.Key)) {
+    tl.blurFunc = handler
+}
+
+func (tl *TextLineList)GetBlurFunc() func(tcell.Key) {
+    return tl.blurFunc
 }
 
 func (tl *TextLineList)Draw(scr tcell.Screen) {
@@ -195,9 +214,12 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
 	}
 	// cursor> textline
 	if i == tl.cur {
-	    cursor := ">"
-	    if tl.open {
-		cursor = "V"
+	    cursor := "-"
+	    if tl.hasFocus {
+		cursor = ">"
+		if tl.open {
+		    cursor = "V"
+		}
 	    }
 	    PrintR(scr, cursor, x-1, y, 1)
 	}
