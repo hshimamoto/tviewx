@@ -58,16 +58,29 @@ func main() {
 	it := create(list2)
 	list2.AddItem(it)
     }
+
+    bp := tviewx.NewButtonPanel()
+    bp.AddButton("Button1")
+    bp.AddButton("Button2")
+    bp.AddButton("Button3")
+    bp.AddButton("Button4")
+    bp.AddButton("Button5")
+    bp.SetLostFocusInLoop(true)
+
     //
     flex := tview.NewFlex().SetDirection(tview.FlexRow)
     flex.AddItem(list1, 10, 1, true)
     flex.AddItem(list2, 0, 1, true)
+    flex.AddItem(bp, 1, 1, true)
 
     // blur
     list1.SetBlurFunc(func(tcell.Key){
 	app.SetFocus(list2)
     })
     list2.SetBlurFunc(func(tcell.Key){
+	app.SetFocus(bp)
+    })
+    bp.SetBlurFunc(func(tcell.Key){
 	app.SetFocus(list1)
     })
 
