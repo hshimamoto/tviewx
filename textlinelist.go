@@ -147,15 +147,15 @@ func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(
 	    }
 	    return
 	}
-	switch event.Key() {
+	switch key := event.Key(); key {
 	case tcell.KeyEnter: tl.OpenMenu()
 	case tcell.KeyUp: tl.CursorUp()
 	case tcell.KeyDown: tl.CursorDown()
 	case tcell.KeyHome: tl.CursorTop()
 	case tcell.KeyEnd: tl.CursorBottom()
-	case tcell.KeyEscape:
+	case tcell.KeyEscape, tcell.KeyTab, tcell.KeyBacktab:
 	    tl.hasFocus = false
-	    tl.blurFunc(tcell.KeyEscape)
+	    tl.blurFunc(key)
 	}
 	switch event.Rune() {
 	case ' ': tl.OpenMenu()

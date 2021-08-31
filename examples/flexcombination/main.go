@@ -74,14 +74,26 @@ func main() {
     flex.AddItem(bp, 1, 1, true)
 
     // blur
-    list1.SetBlurFunc(func(tcell.Key){
-	app.SetFocus(list2)
+    list1.SetBlurFunc(func(key tcell.Key){
+	if key == tcell.KeyBacktab {
+	    app.SetFocus(bp)
+	} else {
+	    app.SetFocus(list2)
+	}
     })
-    list2.SetBlurFunc(func(tcell.Key){
-	app.SetFocus(bp)
+    list2.SetBlurFunc(func(key tcell.Key){
+	if key == tcell.KeyBacktab {
+	    app.SetFocus(list1)
+	} else {
+	    app.SetFocus(bp)
+	}
     })
-    bp.SetBlurFunc(func(tcell.Key){
-	app.SetFocus(list1)
+    bp.SetBlurFunc(func(key tcell.Key){
+	if key == tcell.KeyBacktab {
+	    app.SetFocus(list2)
+	} else {
+	    app.SetFocus(list1)
+	}
     })
 
     app.SetRoot(flex, true)
