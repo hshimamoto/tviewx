@@ -112,6 +112,13 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
 		}
 	    }
 	    bp.Focus(delegate)
+	case tcell.KeyEscape:
+	    if bp.lostFocusInLoop {
+		// lose focus here
+		bp.hasFocus = false
+		bp.blurFunc(key)
+		return
+	    }
 	}
     }
     bp.hasFocus = true
