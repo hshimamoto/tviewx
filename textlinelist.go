@@ -212,6 +212,7 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     w -= 2 // for cursor and scroll bar
     h -= 1 // for button
     hdr := 0
+    btm := y + h
     if tl.header != nil {
 	// draw header here
 	tl.header.SetRect(x, y, w, 1)
@@ -244,7 +245,7 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
 	item.SetRect(x, y, w, 1)
 	item.Draw(scr)
 	y++
-	if y >= h {
+	if y >= btm {
 	    break
 	}
     }
@@ -259,7 +260,7 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     x--
     w++
     menu := tl.items[tl.cur].menu
-    menu.SetRect(x, h, w, 1)
+    menu.SetRect(x, btm, w, 1)
     menu.Draw(scr)
     // for debug
     // tview.Print(scr, fmt.Sprintf("%2d %2d %2d", tl.cur, tl.drawst, h), w-12, h, 11, tview.AlignRight, tview.Styles.PrimaryTextColor)
