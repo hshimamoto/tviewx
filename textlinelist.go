@@ -52,6 +52,7 @@ type TextLineList struct {
     open bool
     hasFocus bool
     blurFunc func(tcell.Key)
+    changed func(*TextLineListItem)
 }
 
 func NewTextLineList() *TextLineList {
@@ -64,6 +65,7 @@ func NewTextLineList() *TextLineList {
     tl.open = false
     tl.hasFocus = false
     tl.blurFunc = func(tcell.Key){}
+    tl.changed = nil
     return tl
 }
 
@@ -147,6 +149,7 @@ func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(
 	    }
 	    return
 	}
+	prev := tl.cur
 	switch key := event.Key(); key {
 	case tcell.KeyEnter: tl.OpenMenu()
 	case tcell.KeyUp: tl.CursorUp()
@@ -163,6 +166,13 @@ func (tl *TextLineList)InputHandler() func(event *tcell.EventKey, setFocus func(
 	case 'j': tl.CursorDown()
 	case 'g': tl.CursorTop()
 	case 'G': tl.CursorBottom()
+	}
+
+	// selected item changed
+	if prev != tl.cur {
+	    if tl.changed != nil {
+		tl.changed(tl.items[tl.cur])
+	    }
 	}
     })
 }
@@ -181,6 +191,14 @@ func (tl *TextLineList)SetBlurFunc(handler func(tcell.Key)) {
 
 func (tl *TextLineList)GetBlurFunc() func(tcell.Key) {
     return tl.blurFunc
+}
+
+func (tl *TextLineList)SetChangedFunc(handler func(*TextLineListItem)) {
+    tl.changed = handler
+}
+
+func (tl *TextLineList)GetChangedFunc() func(*TextLineListItem) {
+    return tl.changed
 }
 
 func (tl *TextLineList)Draw(scr tcell.Screen) {
