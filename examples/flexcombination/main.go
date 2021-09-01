@@ -14,6 +14,8 @@ import (
 func main() {
     app := tviewx.NewApplication()
 
+    label := tview.NewTextView().SetText("undefined")
+
     list1 := tviewx.NewTextLineList()
     list2 := tviewx.NewTextLineList()
 
@@ -59,6 +61,10 @@ func main() {
 	list2.AddItem(it)
     }
 
+    list1.SetChangedFunc(func(it *tviewx.TextLineListItem) {
+	label.SetText(it.GetItem(0).GetText(false))
+    })
+
     bp := tviewx.NewButtonPanel()
     bp.AddButton("Button1")
     bp.AddButton("Button2")
@@ -69,6 +75,7 @@ func main() {
 
     //
     flex := tview.NewFlex().SetDirection(tview.FlexRow)
+    flex.AddItem(label, 1, 1, false)
     flex.AddItem(list1, 10, 1, true)
     flex.AddItem(list2, 0, 1, true)
     flex.AddItem(bp, 1, 1, true)
