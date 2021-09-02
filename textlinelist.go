@@ -257,8 +257,6 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
 	PrintR(scr, "V", w+1, h-1, 1)
     }
     // menu buttons
-    x--
-    w++
     menu := tl.items[tl.cur].menu
     menu.SetRect(x, btm, w, 1)
     menu.Draw(scr)
