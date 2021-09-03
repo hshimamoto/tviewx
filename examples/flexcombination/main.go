@@ -14,7 +14,7 @@ import (
 func main() {
     app := tviewx.NewApplication()
 
-    label := tview.NewTextView().SetText("undefined")
+    label := tviewx.NewTextView().SetText("undefined")
 
     list1 := tviewx.NewTextLineList()
     list2 := tviewx.NewTextLineList()
@@ -79,6 +79,7 @@ func main() {
     iflex.AddItem(list2, 0, 1, true)
 
     flex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    flex.AddItem(label, 1, 1, false)
     flex.AddItem(iflex, 0, 1, true)
     flex.AddItem(bp, 1, 1, true)
 
