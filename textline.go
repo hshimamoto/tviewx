@@ -9,7 +9,7 @@ import (
 )
 
 type textlineItem struct {
-    *tview.TextView
+    *TextView
     size int
 }
 
@@ -31,13 +31,13 @@ func NewTextLine() *TextLine {
 
 func (t *TextLine)AddText(text string, size int) *TextLine {
     ti := &textlineItem{}
-    ti.TextView = tview.NewTextView().SetText(text)
+    ti.TextView = NewTextView().SetText(text)
     ti.size = size
     t.items = append(t.items, ti)
     return t
 }
 
-func (t *TextLine)GetItem(index int) *tview.TextView {
+func (t *TextLine)GetItem(index int) *TextView {
     if index < 0 || index >= len(t.items) {
 	return nil
     }
