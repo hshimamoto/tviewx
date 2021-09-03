@@ -6,7 +6,7 @@ package main
 import (
     "math/rand"
 
-    "github.com/gdamore/tcell/v2"
+    //"github.com/gdamore/tcell/v2"
     "github.com/rivo/tview"
     "github.com/hshimamoto/tviewx"
 )
@@ -73,35 +73,14 @@ func main() {
     bp.AddButton("Button5")
     bp.SetLostFocusInLoop(true)
 
-    //
-    flex := tview.NewFlex().SetDirection(tview.FlexRow)
-    flex.AddItem(label, 1, 1, false)
-    flex.AddItem(list1, 10, 1, true)
-    flex.AddItem(list2, 0, 1, true)
-    flex.AddItem(bp, 1, 1, true)
+    // inner flex
+    iflex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    iflex.AddItem(list1, 10, 1, true)
+    iflex.AddItem(list2, 0, 1, true)
 
-    // blur
-    list1.SetBlurFunc(func(key tcell.Key){
-	if key == tcell.KeyBacktab {
-	    app.SetFocus(bp)
-	} else {
-	    app.SetFocus(list2)
-	}
-    })
-    list2.SetBlurFunc(func(key tcell.Key){
-	if key == tcell.KeyBacktab {
-	    app.SetFocus(list1)
-	} else {
-	    app.SetFocus(bp)
-	}
-    })
-    bp.SetBlurFunc(func(key tcell.Key){
-	if key == tcell.KeyBacktab {
-	    app.SetFocus(list2)
-	} else {
-	    app.SetFocus(list1)
-	}
-    })
+    flex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    flex.AddItem(iflex, 0, 1, true)
+    flex.AddItem(bp, 1, 1, true)
 
     app.SetRoot(flex, true)
     app.Run()
