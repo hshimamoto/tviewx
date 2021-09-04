@@ -75,10 +75,12 @@ func main() {
 
     // inner flex
     iflex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    iflex.SetBorder(true).SetTitle("Inner")
     iflex.AddItem(list1, 10, 1, true)
     iflex.AddItem(list2, 0, 1, true)
 
     flex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    flex.SetBorder(true)
     flex.AddItem(label, 1, 1, false)
     flex.AddItem(iflex, 0, 1, true)
     flex.AddItem(bp, 1, 1, true)

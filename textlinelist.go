@@ -251,10 +251,10 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     }
     // scroll bar
     if tl.drawst > 0 {
-	PrintR(scr, "^", w+1, top, 1)
+	PrintR(scr, "^", x+w, top, 1)
     }
     if tl.drawst <= tl.last - (h - hdr) {
-	PrintR(scr, "V", w+1, btm-1, 1)
+	PrintR(scr, "V", x+w, btm-1, 1)
     }
     // menu buttons
     menu := tl.items[tl.cur].menu
