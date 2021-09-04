@@ -10,7 +10,6 @@ import (
 
 type flexItem struct {
     Item Primitive
-    FixedSize, Proportion int
     Focus bool
     BlurFunc func(tcell.Key)
 }
@@ -34,8 +33,6 @@ func NewFlex() *Flex {
 func (f *Flex)AddItem(item Primitive, fixed, prop int, focus bool) *Flex {
     i := &flexItem{
 	Item: item,
-	FixedSize: fixed,
-	Proportion: prop,
 	Focus: focus,
 	BlurFunc: item.GetBlurFunc(),
     }
@@ -75,13 +72,6 @@ func (f *Flex)Clear() *Flex {
 }
 
 func (f *Flex)ResizeItem(p Primitive, fixed, prop int) *Flex {
-    for _, item := range f.items {
-	if item.Item == p {
-	    item.FixedSize = fixed
-	    item.Proportion = prop
-	}
-    }
-    // call super
     f.Flex.ResizeItem(p, fixed, prop)
     return f
 }
@@ -119,49 +109,30 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	    f.Focus(delegate)
 	}
 	sz := len(f.items)
+	move := func(i int, key tcell.Key) {
+	    cur := f.focused
+	    n := (cur + i) % sz
+	    for n != cur {
+		if n == 0 {
+		    if f.blurFunc != nil {
+			f.focus = nil
+			f.blurFunc(key)
+			return
+		    }
+		}
+		if f.items[n].Focus {
+		    focus(n)
+		    return
+		}
+		// next
+		n = (n + i) % sz
+	    }
+	}
 	switch key {
 	case tcell.KeyTab, tcell.KeyEnter: // forward
-	    for i := f.focused + 1; i < sz; i++ {
-		if f.items[i].Focus {
-		    focus(i)
-		    return
-		}
-	    }
-	    // not found
-	    if f.blurFunc != nil {
-		// call blur and end
-		f.focus = nil
-		f.blurFunc(key)
-		return
-	    }
-	    // lookup from head
-	    for i := 0; i < sz; i++ {
-		if f.items[i].Focus {
-		    focus(i)
-		    return
-		}
-	    }
+	    move(1, key)
 	case tcell.KeyBacktab: // backword
-	    for i := f.focused - 1; i >= 0; i-- {
-		if f.items[i].Focus {
-		    focus(i)
-		    return
-		}
-	    }
-	    // not found
-	    if f.blurFunc != nil {
-		// call blur and end
-		f.focus = nil
-		f.blurFunc(key)
-		return
-	    }
-	    // lookup from head
-	    for i := sz - 1; i > f.focused; i-- {
-		if f.items[i].Focus {
-		    focus(i)
-		    return
-		}
-	    }
+	    move(-1, key)
 	case tcell.KeyEscape: // just lost focus
 	    if f.blurFunc != nil {
 		f.focus = nil
