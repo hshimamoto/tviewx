@@ -78,17 +78,17 @@ func (t *TextLine)Draw(scr tcell.Screen) {
     cx += 1
     for _, ti := range t.items {
 	bw := ti.size
-	if cx + bw >= rightLimit {
-	    bw = rightLimit - cx
+	if cx + bw >= rightLimit - 1 {
+	    bw = rightLimit - 1 - cx
 	}
 	ti.SetRect(cx, y, bw, 1)
 	ti.SetTextColor(t.textcolor)
 	ti.Draw(scr)
 	cx += bw
+	tview.Print(scr, t.separator, cx, y, 1, tview.AlignCenter, t.textcolor)
 	if cx >= rightLimit {
 	    break
 	}
-	tview.Print(scr, t.separator, cx, y, 1, tview.AlignCenter, t.textcolor)
 	cx += 1
 	if cx >= rightLimit {
 	    break
