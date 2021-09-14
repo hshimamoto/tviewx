@@ -9,7 +9,7 @@ import (
 )
 
 type flexItem struct {
-    Item Primitive
+    Item tview.Primitive
     Focus bool
     BlurFunc func(tcell.Key)
 }
@@ -30,11 +30,14 @@ func NewFlex() *Flex {
 }
 
 // override
-func (f *Flex)AddItem(item Primitive, fixed, prop int, focus bool) *Flex {
+func (f *Flex)AddItem(item tview.Primitive, fixed, prop int, focus bool) *Flex {
     i := &flexItem{
 	Item: item,
 	Focus: focus,
-	BlurFunc: item.GetBlurFunc(),
+	BlurFunc: nil,
+    }
+    if xp, ok := item.(Primitive); ok {
+	i.BlurFunc = xp.GetBlurFunc()
     }
     f.items = append(f.items, i)
 
@@ -43,7 +46,7 @@ func (f *Flex)AddItem(item Primitive, fixed, prop int, focus bool) *Flex {
     return f
 }
 
-func (f *Flex)RemoveItem(p Primitive) *Flex {
+func (f *Flex)RemoveItem(p tview.Primitive) *Flex {
     for i := len(f.items) - 1; i >= 0; i-- {
 	if f.items[i].Item == p {
 	    if f.items[i] == f.focus {
@@ -62,7 +65,9 @@ func (f *Flex)RemoveItem(p Primitive) *Flex {
 func (f *Flex)Clear() *Flex {
     // reset BlurFunc
     for _, item := range f.items {
-	item.Item.SetBlurFunc(item.BlurFunc)
+	if xp, ok := item.Item.(Primitive); ok {
+	    xp.SetBlurFunc(item.BlurFunc)
+	}
     }
     f.items = nil
     f.focus = nil
@@ -71,7 +76,7 @@ func (f *Flex)Clear() *Flex {
     return f
 }
 
-func (f *Flex)ResizeItem(p Primitive, fixed, prop int) *Flex {
+func (f *Flex)ResizeItem(p tview.Primitive, fixed, prop int) *Flex {
     f.Flex.ResizeItem(p, fixed, prop)
     return f
 }
@@ -147,7 +152,9 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	// nothing to do
 	return
     }
-    f.focus.Item.SetBlurFunc(onBlur)
+    if xp, ok := f.focus.Item.(Primitive); ok {
+	xp.SetBlurFunc(onBlur)
+    }
     delegate(f.focus.Item)
 }
 
