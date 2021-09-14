@@ -111,7 +111,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	sz := len(f.items)
 	move := func(i int, key tcell.Key) {
 	    cur := f.focused
-	    n := (cur + i) % sz
+	    n := (cur + i + sz) % sz
 	    for n != cur {
 		if n == 0 {
 		    if f.blurFunc != nil {
@@ -125,7 +125,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 		    return
 		}
 		// next
-		n = (n + i) % sz
+		n = (n + i + sz) % sz
 	    }
 	}
 	switch key {
