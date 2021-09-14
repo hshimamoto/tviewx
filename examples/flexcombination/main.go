@@ -6,8 +6,6 @@ package main
 import (
     "math/rand"
 
-    //"github.com/gdamore/tcell/v2"
-    "github.com/rivo/tview"
     "github.com/hshimamoto/tviewx"
 )
 
@@ -74,12 +72,12 @@ func main() {
     bp.SetLostFocusInLoop(true)
 
     // inner flex
-    iflex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    iflex := tviewx.NewFlexRow()
     iflex.SetBorder(true).SetTitle("Inner")
     iflex.AddItem(list1, 10, 1, true)
     iflex.AddItem(list2, 0, 1, true)
 
-    flex := tviewx.NewFlex().SetDirection(tview.FlexRow)
+    flex := tviewx.NewFlexRow()
     flex.SetBorder(true)
     flex.AddItem(label, 1, 1, false)
     flex.AddItem(iflex, 0, 1, true)

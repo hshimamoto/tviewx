@@ -29,6 +29,12 @@ func NewFlex() *Flex {
     return f
 }
 
+func NewFlexRow() *Flex {
+    f := NewFlex()
+    f.SetDirection(tview.FlexRow)
+    return f
+}
+
 // override
 func (f *Flex)AddItem(item tview.Primitive, fixed, prop int, focus bool) *Flex {
     i := &flexItem{
