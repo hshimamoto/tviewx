@@ -154,6 +154,8 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 		// next
 		n = (n + i + sz) % sz
 	    }
+	    // no other items to get focus
+	    focus(cur, false)
 	}
 	switch key {
 	case tcell.KeyTab, tcell.KeyEnter: // forward
