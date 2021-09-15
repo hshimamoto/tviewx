@@ -51,7 +51,7 @@ func main() {
     list.GetItem(0).ReplaceItems(0, []string{"First", "FIRST", "first"})
     list.GetItem(1).ReplaceItems(0, []string{"Second", "SECOND", "second"})
     //
-    flex := tview.NewFlex().SetDirection(tview.FlexRow)
+    flex := tviewx.NewFlexRow()
     flex.AddItem(list, 10, 1, true)
     flex.AddItem(tview.NewBox(), 0, 1, false)
     flex.AddItem(tview.NewBox(), 0, 1, false)
