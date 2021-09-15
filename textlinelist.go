@@ -53,6 +53,8 @@ type TextLineList struct {
     hasFocus bool
     blurFunc func(tcell.Key)
     changed func(*TextLineListItem)
+    scrollup string
+    scrolldown string
 }
 
 func NewTextLineList() *TextLineList {
@@ -66,6 +68,8 @@ func NewTextLineList() *TextLineList {
     tl.hasFocus = false
     tl.blurFunc = func(tcell.Key){}
     tl.changed = nil
+    tl.scrollup = "\u25b2"
+    tl.scrolldown = "\u25bc"
     return tl
 }
 
@@ -251,10 +255,10 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     }
     // scroll bar
     if tl.drawst > 0 {
-	PrintR(scr, "^", x+w, top, 1)
+	PrintR(scr, tl.scrollup, x+w, top, 1)
     }
     if tl.drawst <= tl.last - (h - hdr) {
-	PrintR(scr, "V", x+w, btm-1, 1)
+	PrintR(scr, tl.scrolldown, x+w, btm-1, 1)
     }
     // menu buttons
     menu := tl.items[tl.cur].menu
