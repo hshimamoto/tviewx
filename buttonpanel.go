@@ -13,6 +13,7 @@ type ButtonPanel struct {
     buttons []*Button
     hasFocus bool
     focusedButton int
+    focusBackword bool
     selected func(*Button)
     lostFocusInLoop bool
     blurFunc func(tcell.Key)
@@ -23,6 +24,7 @@ func NewButtonPanel() *ButtonPanel {
     bp.Box = tview.NewBox()
     bp.hasFocus = false
     bp.focusedButton = -1
+    bp.focusBackword = false
     bp.selected = nil
     bp.lostFocusInLoop = false
     bp.blurFunc = func(tcell.Key){}
@@ -85,6 +87,10 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
     if bp.focusedButton == -1 {
 	// pick the first button
 	bp.focusedButton = 0
+	if bp.focusBackword {
+	    // pick the last button
+	    bp.focusedButton = len(bp.buttons) - 1
+	}
     }
     handler := func(key tcell.Key) {
 	switch key {
@@ -94,6 +100,7 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
 		bp.focusedButton = 0
 		if bp.lostFocusInLoop {
 		    // lose focus here
+		    bp.focusedButton = -1
 		    bp.hasFocus = false
 		    bp.blurFunc(key)
 		    return
@@ -106,6 +113,7 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
 		bp.focusedButton = len(bp.buttons) - 1
 		if bp.lostFocusInLoop {
 		    // lose focus here
+		    bp.focusedButton = -1
 		    bp.hasFocus = false
 		    bp.blurFunc(key)
 		    return
@@ -154,4 +162,8 @@ func (bp *ButtonPanel)InputHandler() func(event *tcell.EventKey, setFocus func(p
 	    }
 	}
     })
+}
+
+func (bp *ButtonPanel)SetFocusBackward(b bool) {
+    bp.focusBackword = b
 }

@@ -14,3 +14,7 @@ type Primitive interface {
     GetBlurFunc() func(tcell.Key)
     SetBlurFunc(func(tcell.Key))
 }
+
+type FocusBackward interface {
+    SetFocusBackward(bool)
+}

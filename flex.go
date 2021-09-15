@@ -18,6 +18,7 @@ type Flex struct {
     *tview.Flex
     items []*flexItem
     focused int
+    focusBackword bool
     focus *flexItem
     blurFunc func(tcell.Key)
 }
@@ -100,12 +101,23 @@ func (f *Flex)SetFullScreen(b bool) *Flex {
 func (f *Flex)Focus(delegate func(p tview.Primitive)) {
     // there is no focus
     if f.focus == nil {
-	for i := 0; i < len(f.items); i++ {
-	    item := f.items[i]
-	    if item.Focus {
-		f.focus = item
-		f.focused = i
-		break
+	if f.focusBackword {
+	    for i := len(f.items) - 1; i >= 0; i-- {
+		item := f.items[i]
+		if item.Focus {
+		    f.focus = item
+		    f.focused = i
+		    break
+		}
+	    }
+	} else {
+	    for i := 0; i < len(f.items); i++ {
+		item := f.items[i]
+		if item.Focus {
+		    f.focus = item
+		    f.focused = i
+		    break
+		}
 	    }
 	}
     }
@@ -114,9 +126,13 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	return
     }
     onBlur := func(key tcell.Key) {
-	focus := func(i int) {
+	focus := func(i int, b bool) {
 	    f.focus = f.items[i]
 	    f.focused = i
+	    // backward?
+	    if fb, ok := f.focus.Item.(FocusBackward); ok {
+		fb.SetFocusBackward(b)
+	    }
 	    f.Focus(delegate)
 	}
 	sz := len(f.items)
@@ -132,7 +148,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 		    }
 		}
 		if f.items[n].Focus {
-		    focus(n)
+		    focus(n, (i == -1))
 		    return
 		}
 		// next
@@ -151,7 +167,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 		return
 	    }
 	    // back to current one
-	    focus(f.focused)
+	    focus(f.focused, false)
 	}
     }
     if f.focus == nil {
@@ -174,4 +190,8 @@ func (f *Flex)GetBlurFunc() func(tcell.Key) {
 
 func (f *Flex)SetBlurFunc(handler func(tcell.Key)) {
     f.blurFunc = handler
+}
+
+func (f *Flex)SetFocusBackward(b bool) {
+    f.focusBackword = b
 }
