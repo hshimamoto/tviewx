@@ -4,15 +4,18 @@
 package main
 
 import (
+    "fmt"
     "math/rand"
 
     "github.com/hshimamoto/tviewx"
 )
 
 func main() {
+    w, h := tviewx.GetCurrentScreenSize()
+
     app := tviewx.NewApplication()
 
-    label := tviewx.NewTextView().SetText("undefined")
+    label := tviewx.NewTextView().SetText(fmt.Sprintf("(%d, %d)", w, h))
 
     list1 := tviewx.NewTextLineList()
     list2 := tviewx.NewTextLineList()

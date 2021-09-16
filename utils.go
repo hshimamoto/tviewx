@@ -19,3 +19,16 @@ func PrintR(scr tcell.Screen, str string, x, y, w int) (int, int) {
 func PrintC(scr tcell.Screen, str string, x, y, w int) (int, int) {
     return tview.Print(scr, str, x, y, w, tview.AlignCenter, tview.Styles.PrimaryTextColor)
 }
+
+// tcell related
+func GetCurrentScreenSize() (int, int) {
+    screen, err := tcell.NewScreen()
+    if err != nil {
+	return 0, 0
+    }
+    if screen.Init() != nil {
+	return 0, 0
+    }
+    defer screen.Fini()
+    return screen.Size()
+}
