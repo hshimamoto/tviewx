@@ -237,11 +237,11 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
 	}
 	// cursor> textline
 	if i == tl.cur {
-	    cursor := "-"
+	    cursor := "\u25b7"
 	    if tl.hasFocus {
-		cursor = ">"
+		cursor = "\u25b6"
 		if tl.open {
-		    cursor = "V"
+		    cursor = "\u25bd"
 		}
 	    }
 	    PrintR(scr, cursor, x-1, y, 1)
