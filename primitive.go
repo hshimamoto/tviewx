@@ -5,12 +5,9 @@ package tviewx
 
 import (
     "github.com/gdamore/tcell/v2"
-    "github.com/rivo/tview"
 )
 
-type Primitive interface {
-    tview.Primitive
-    // on Blur handler
+type BlurFunc interface {
     GetBlurFunc() func(tcell.Key)
     SetBlurFunc(func(tcell.Key))
 }

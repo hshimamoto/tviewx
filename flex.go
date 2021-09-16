@@ -43,7 +43,7 @@ func (f *Flex)AddItem(item tview.Primitive, fixed, prop int, focus bool) *Flex {
 	Focus: focus,
 	BlurFunc: nil,
     }
-    if xp, ok := item.(Primitive); ok {
+    if xp, ok := item.(BlurFunc); ok {
 	i.BlurFunc = xp.GetBlurFunc()
     }
     f.items = append(f.items, i)
@@ -72,7 +72,7 @@ func (f *Flex)RemoveItem(p tview.Primitive) *Flex {
 func (f *Flex)Clear() *Flex {
     // reset BlurFunc
     for _, item := range f.items {
-	if xp, ok := item.Item.(Primitive); ok {
+	if xp, ok := item.Item.(BlurFunc); ok {
 	    xp.SetBlurFunc(item.BlurFunc)
 	}
     }
@@ -176,7 +176,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	// nothing to do
 	return
     }
-    if xp, ok := f.focus.Item.(Primitive); ok {
+    if xp, ok := f.focus.Item.(BlurFunc); ok {
 	xp.SetBlurFunc(onBlur)
     }
     delegate(f.focus.Item)
