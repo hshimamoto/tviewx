@@ -265,5 +265,5 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     menu.SetRect(x, btm, w, 1)
     menu.Draw(scr)
     // for debug
-    // tview.Print(scr, fmt.Sprintf("%2d %2d %2d", tl.cur, tl.drawst, h), w-12, h, 11, tview.AlignRight, tview.Styles.PrimaryTextColor)
+    Dbg.Printf("TextLineList<%p>.Draw: cur=%d", tl, tl.cur)
 }

@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+    tviewx.Dbg.Enable()
+
     w, h := tviewx.GetCurrentScreenSize()
 
     app := tviewx.NewApplication()
@@ -88,4 +90,9 @@ func main() {
 
     app.SetRoot(flex, true)
     app.Run()
+
+    // show debugging info
+    for _, line := range tviewx.Dbg.Lines() {
+	fmt.Println(line)
+    }
 }
