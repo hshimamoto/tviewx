@@ -11,6 +11,7 @@ Components
 - Button
 - ButtonPanel
 - Flex
+- TabPanel
 - TextLine
 - TextLineList
 - TextView
