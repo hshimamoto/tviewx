@@ -10,6 +10,7 @@ import (
 
 type Button struct {
     *tview.Button
+    blurFunc func(tcell.Key)
 }
 
 func NewButton(label string) *Button {
@@ -27,4 +28,13 @@ func (b *Button)InputHandler() func(*tcell.EventKey, func(tview.Primitive)) {
 	}
 	b.Button.InputHandler()(e, setFocus)
     })
+}
+
+func (b *Button)SetBlurFunc(handler func(tcell.Key)) {
+    b.Button.SetBlurFunc(handler)
+    b.blurFunc = handler
+}
+
+func (b *Button)GetBlurFunc() func(tcell.Key) {
+    return b.blurFunc
 }
