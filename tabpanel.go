@@ -66,12 +66,30 @@ func (tp *TabPanel)Draw(scr tcell.Screen) {
 	PrintL(scr, "No items", x, y, 8)
 	return
     }
-    item_y := y
+    // calc item box and tab location
+    tab_x := x + 2
+    item_y := y + 1
     tab_y := y + h - 1
     if tp.tabOnTop {
 	item_y = y + 1
 	tab_y = y
     }
+    item_x := x + 1
+    item_w := w - 2
+    item_h := h - 2
+    // draw item box
+    for i := 0; i < w; i++ {
+	PrintL(scr, "\u2500", x + i, y, 1)
+	PrintL(scr, "\u2500", x + i, y + h - 1, 1)
+    }
+    for i := 0; i < h; i++ {
+	PrintL(scr, "\u2502", x, y + i, 1)
+	PrintL(scr, "\u2502", x + w - 1, y + i, 1)
+    }
+    PrintL(scr, "\u250c", x, y, 1)
+    PrintL(scr, "\u2510", x + w - 1, y, 1)
+    PrintL(scr, "\u2514", x, y + h - 1, 1)
+    PrintL(scr, "\u2518", x + w - 1, y + h - 1, 1)
     // draw items and collect tabs
     tabs := []string{}
     for i, it := range tp.items {
@@ -91,13 +109,13 @@ func (tp *TabPanel)Draw(scr tcell.Screen) {
 		tab = fmt.Sprintf("\u25c1%s\u25b7", it.Name)
 	    }
 	    // draw item
-	    it.Item.SetRect(x, item_y, w, h-1)
+	    it.Item.SetRect(item_x, item_y, item_w, item_h)
 	    it.Item.Draw(scr)
 	}
 	tabs = append(tabs, tab)
     }
     tabstr := strings.Join(tabs, " ")
-    PrintL(scr, tabstr, x+1, tab_y, len(tabstr))
+    PrintL(scr, tabstr, tab_x, tab_y, len(tabstr))
 }
 
 func (tp *TabPanel)Focus(delegate func(tview.Primitive)) {
