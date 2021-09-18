@@ -68,28 +68,29 @@ func (tp *TabPanel)Draw(scr tcell.Screen) {
     }
     // calc item box and tab location
     tab_x := x + 2
-    item_y := y + 1
     tab_y := y + h - 1
     if tp.tabOnTop {
-	item_y = y + 1
 	tab_y = y
     }
     item_x := x + 1
+    item_y := y + 1
     item_w := w - 2
     item_h := h - 2
+    right := x + w - 1
+    bottom := y + h - 1
     // draw item box
     for i := 0; i < w; i++ {
 	PrintL(scr, "\u2500", x + i, y, 1)
-	PrintL(scr, "\u2500", x + i, y + h - 1, 1)
+	PrintL(scr, "\u2500", x + i, bottom, 1)
     }
     for i := 0; i < h; i++ {
 	PrintL(scr, "\u2502", x, y + i, 1)
-	PrintL(scr, "\u2502", x + w - 1, y + i, 1)
+	PrintL(scr, "\u2502", right, y + i, 1)
     }
     PrintL(scr, "\u250c", x, y, 1)
-    PrintL(scr, "\u2510", x + w - 1, y, 1)
-    PrintL(scr, "\u2514", x, y + h - 1, 1)
-    PrintL(scr, "\u2518", x + w - 1, y + h - 1, 1)
+    PrintL(scr, "\u2510", right, y, 1)
+    PrintL(scr, "\u2514", x, bottom, 1)
+    PrintL(scr, "\u2518", right, bottom, 1)
     // draw items and collect tabs
     tabs := []string{}
     for i, it := range tp.items {
