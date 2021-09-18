@@ -260,6 +260,22 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     if tl.drawst <= tl.last - (h - hdr) {
 	PrintR(scr, tl.scrolldown, x+w, btm-1, 1)
     }
+    sptr := int(((h - 1) * (tl.cur + 1)) / len(tl.items)) - 1
+    Dbg.Printf(
+	"TextLineList<%p>.Draw: cur=%d/%d *%d => %d",
+	tl, tl.cur + 1, len(tl.items), h-1, sptr)
+    if tl.cur == 0 {
+	PrintR(scr, "*", x+w, top, 1)
+    } else if tl.cur == (len(tl.items) - 1) {
+	PrintR(scr, "*", x+w, btm-1, 1)
+    } else {
+	if sptr <= 0 {
+	    sptr = 1
+	} else if sptr == (h-2) {
+	    sptr = h - 3
+	}
+	PrintR(scr, "*", x+w, top+sptr, 1)
+    }
     // menu buttons
     menu := tl.items[tl.cur].menu
     menu.SetRect(x, btm, w, 1)
