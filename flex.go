@@ -19,13 +19,13 @@ type Flex struct {
     items []*flexItem
     focused int
     focusBackword bool
-    focus *flexItem
     blurFunc func(tcell.Key)
 }
 
 func NewFlex() *Flex {
     f := &Flex{
 	Flex: tview.NewFlex(),
+	focused: -1,
     }
     return f
 }
@@ -56,9 +56,9 @@ func (f *Flex)AddItem(item tview.Primitive, fixed, prop int, focus bool) *Flex {
 func (f *Flex)RemoveItem(p tview.Primitive) *Flex {
     for i := len(f.items) - 1; i >= 0; i-- {
 	if f.items[i].Item == p {
-	    if f.items[i] == f.focus {
+	    if i == f.focused {
 		// lose focus
-		f.focus = nil
+		f.focused = -1
 	    }
 	    f.items = append(f.items[:i], f.items[i+1:]...)
 	}
@@ -77,7 +77,7 @@ func (f *Flex)Clear() *Flex {
 	}
     }
     f.items = nil
-    f.focus = nil
+    f.focused = -1
     // call super
     f.Flex.Clear()
     return f
@@ -100,12 +100,11 @@ func (f *Flex)SetFullScreen(b bool) *Flex {
 
 func (f *Flex)Focus(delegate func(p tview.Primitive)) {
     // there is no focus
-    if f.focus == nil {
+    if f.focused == -1 {
 	if f.focusBackword {
 	    for i := len(f.items) - 1; i >= 0; i-- {
 		item := f.items[i]
 		if item.Focus {
-		    f.focus = item
 		    f.focused = i
 		    break
 		}
@@ -114,7 +113,6 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	    for i := 0; i < len(f.items); i++ {
 		item := f.items[i]
 		if item.Focus {
-		    f.focus = item
 		    f.focused = i
 		    break
 		}
@@ -122,15 +120,15 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	}
     }
     // still nil?
-    if f.focus == nil {
+    if f.focused == -1 {
 	return
     }
     onBlur := func(key tcell.Key) {
 	focus := func(i int, b bool) {
-	    f.focus = f.items[i]
 	    f.focused = i
+	    item := f.items[i].Item
 	    // backward?
-	    if fb, ok := f.focus.Item.(FocusBackward); ok {
+	    if fb, ok := item.(FocusBackward); ok {
 		fb.SetFocusBackward(b)
 	    }
 	    f.Focus(delegate)
@@ -168,18 +166,22 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	    focus(f.focused, false)
 	}
     }
-    if f.focus == nil {
+    if f.focused == -1 {
 	// nothing to do
 	return
     }
-    if xp, ok := f.focus.Item.(BlurFunc); ok {
+    item := f.items[f.focused].Item
+    if xp, ok := item.(BlurFunc); ok {
 	xp.SetBlurFunc(onBlur)
     }
-    delegate(f.focus.Item)
+    delegate(item)
 }
 
 func (f *Flex)HasFocus() bool {
-    return f.focus != nil && f.focus.Item.HasFocus()
+    if f.focused == -1 {
+	return false
+    }
+    return f.items[f.focused].Item.HasFocus()
 }
 
 func (f *Flex)GetBlurFunc() func(tcell.Key) {
@@ -194,7 +196,7 @@ func (f *Flex)tryBlur(key tcell.Key) bool {
     if f.blurFunc == nil {
 	return false
     }
-    f.focus = nil
+    f.focused = -1
     f.blurFunc(key)
     return true
 }
