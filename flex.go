@@ -141,9 +141,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	    n := (cur + i + sz) % sz
 	    for n != cur {
 		if (n == 0 && i == 1) || (n == (sz - 1) && i == -1) {
-		    if f.blurFunc != nil {
-			f.focus = nil
-			f.blurFunc(key)
+		    if f.tryBlur(key) {
 			return
 		    }
 		}
@@ -163,9 +161,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	case tcell.KeyBacktab: // backword
 	    move(-1, key)
 	case tcell.KeyEscape: // just lost focus
-	    if f.blurFunc != nil {
-		f.focus = nil
-		f.blurFunc(key)
+	    if f.tryBlur(key) {
 		return
 	    }
 	    // back to current one
@@ -192,6 +188,15 @@ func (f *Flex)GetBlurFunc() func(tcell.Key) {
 
 func (f *Flex)SetBlurFunc(handler func(tcell.Key)) {
     f.blurFunc = handler
+}
+
+func (f *Flex)tryBlur(key tcell.Key) bool {
+    if f.blurFunc == nil {
+	return false
+    }
+    f.focus = nil
+    f.blurFunc(key)
+    return true
 }
 
 func (f *Flex)SetFocusBackward(b bool) {
