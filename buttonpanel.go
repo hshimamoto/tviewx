@@ -27,7 +27,7 @@ func NewButtonPanel() *ButtonPanel {
     bp.focusBackword = false
     bp.selected = nil
     bp.lostFocusInLoop = false
-    bp.blurFunc = func(tcell.Key){}
+    bp.blurFunc = nil
     return bp
 }
 
@@ -101,8 +101,7 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
 		if bp.lostFocusInLoop {
 		    // lose focus here
 		    bp.focusedButton = -1
-		    bp.hasFocus = false
-		    bp.blurFunc(key)
+		    bp.blur(key)
 		    return
 		}
 	    }
@@ -114,8 +113,7 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
 		if bp.lostFocusInLoop {
 		    // lose focus here
 		    bp.focusedButton = -1
-		    bp.hasFocus = false
-		    bp.blurFunc(key)
+		    bp.blur(key)
 		    return
 		}
 	    }
@@ -123,8 +121,7 @@ func (bp *ButtonPanel)Focus(delegate func(p tview.Primitive)) {
 	case tcell.KeyEscape:
 	    if bp.lostFocusInLoop {
 		// lose focus here
-		bp.hasFocus = false
-		bp.blurFunc(key)
+		bp.blur(key)
 		return
 	    }
 	}
@@ -149,6 +146,14 @@ func (bp *ButtonPanel)SetBlurFunc(handler func(tcell.Key)) {
 
 func (bp *ButtonPanel)GetBlurFunc() func(tcell.Key) {
     return bp.blurFunc
+}
+
+func (bp *ButtonPanel)blur(key tcell.Key) {
+    bp.hasFocus = false
+    if bp.blurFunc == nil {
+	return
+    }
+    bp.blurFunc(key)
 }
 
 func (bp *ButtonPanel)InputHandler() func(event *tcell.EventKey, setFocus func(p tview.Primitive)) {
