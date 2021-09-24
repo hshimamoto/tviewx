@@ -1,5 +1,5 @@
 // tviewx/examples/textline
-// MIT License Copyright(c) 2020 Hiroshi Shimamoto
+// MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package main
 
@@ -18,6 +18,6 @@ func main() {
     text.AddText("fffff", 10)
     text.SetSeparator("[green::b]" + string(tview.Borders.Vertical))
     text.GetItem(2).SetDynamicColors(true).SetText("[yellow::b]0123456789")
-    text.ReplaceItems(3, []string{"DDDDD", "EEEEE", "FFFFF"})
+    text.ReplaceTexts(3, []string{"DDDDD", "EEEEE", "FFFFF"})
     tviewx.NewApplication().SetRoot(text, true).Run()
 }

@@ -1,5 +1,5 @@
 // tviewx/examples/textlinelist
-// MIT License Copyright(c) 2020 Hiroshi Shimamoto
+// MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package main
 
@@ -32,7 +32,7 @@ func main() {
 	it.AddButton(rtext(15))
 	it.AddButton(rtext(15))
 	it.SetSelectedFunc(func(b *tviewx.Button) {
-	    it.ReplaceItem(0, b.GetLabel())
+	    it.ReplaceText(0, b.GetLabel())
 	    list.CloseMenu()
 	})
 	return it
@@ -48,8 +48,8 @@ func main() {
 	it := create()
 	list.AddItem(it)
     }
-    list.GetItem(0).ReplaceItems(0, []string{"First", "FIRST", "first"})
-    list.GetItem(1).ReplaceItems(0, []string{"Second", "SECOND", "second"})
+    list.GetItem(0).ReplaceTexts(0, []string{"First", "FIRST", "first"})
+    list.GetItem(1).ReplaceTexts(0, []string{"Second", "SECOND", "second"})
     //
     flex := tviewx.NewFlexRow()
     flex.AddItem(list, 10, 1, true)

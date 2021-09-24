@@ -1,5 +1,5 @@
 // tviewx/examples/textlinelist
-// MIT License Copyright(c) 2020 Hiroshi Shimamoto
+// MIT License Copyright(c) 2021 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package main
 
@@ -42,7 +42,7 @@ func main() {
 	it.AddButton(rtext(15))
 	it.AddButton(rtext(15))
 	it.SetSelectedFunc(func(b *tviewx.Button) {
-	    it.ReplaceItem(0, b.GetLabel())
+	    it.ReplaceText(0, b.GetLabel())
 	    list.CloseMenu()
 	})
 	return it

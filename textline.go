@@ -44,7 +44,7 @@ func (t *TextLine)GetItem(index int) *TextView {
     return t.items[index].TextView
 }
 
-func (t *TextLine)ReplaceItem(index int, text string) *TextLine {
+func (t *TextLine)ReplaceText(index int, text string) *TextLine {
     if index < 0 || index >= len(t.items) {
 	return t
     }
@@ -52,9 +52,9 @@ func (t *TextLine)ReplaceItem(index int, text string) *TextLine {
     return t
 }
 
-func (t *TextLine)ReplaceItems(index int, texts []string) *TextLine {
+func (t *TextLine)ReplaceTexts(index int, texts []string) *TextLine {
     for i, text := range texts {
-	t.ReplaceItem(index + i, text)
+	t.ReplaceText(index + i, text)
     }
     return t
 }
