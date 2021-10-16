@@ -40,6 +40,9 @@ func (a *Application)SetInputCapture(capture func(event *tcell.EventKey) *tcell.
 func (a *Application)xInputCapture(event *tcell.EventKey) *tcell.EventKey {
     if a.inputCapture != nil {
 	event = a.inputCapture(event)
+	if event == nil {
+	    return nil
+	}
     }
     // Block Ctrl-C
     if event.Key() == tcell.KeyCtrlC {
