@@ -14,6 +14,7 @@ type Application struct {
     inputCapture func(event *tcell.EventKey) *tcell.EventKey
     // for tviewx custom capture
     numCtrlC int
+    ctrlCFunc func()
 }
 
 func NewApplication() *Application {
@@ -36,6 +37,14 @@ func (a *Application)SetInputCapture(capture func(event *tcell.EventKey) *tcell.
     return a
 }
 
+func (a *Application)GetCtrlCFunc() func() {
+    return a.ctrlCFunc
+}
+
+func (a *Application)SetCtrlCFunc(fn func()) {
+    a.ctrlCFunc = fn
+}
+
 // Application inputCapture
 func (a *Application)xInputCapture(event *tcell.EventKey) *tcell.EventKey {
     if a.inputCapture != nil {
@@ -46,6 +55,9 @@ func (a *Application)xInputCapture(event *tcell.EventKey) *tcell.EventKey {
     }
     // Block Ctrl-C
     if event.Key() == tcell.KeyCtrlC {
+	if a.ctrlCFunc != nil {
+	    a.ctrlCFunc()
+	}
 	a.numCtrlC++
 	if a.numCtrlC < 3 {
 	    return nil
