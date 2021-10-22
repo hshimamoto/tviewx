@@ -175,7 +175,7 @@ func (tp *TabPanel)InputHandler() func(event *tcell.EventKey, setFocus func(p tv
 	    switch event.Rune() {
 	    case 'h': tp.tabBackward()
 	    case 'l': tp.tabForward()
-	    case ' ': tp.tabEnter(setFocus)
+	    case 'j', 'k', ' ': tp.tabEnter(setFocus)
 	    }
 	    return
 	}
