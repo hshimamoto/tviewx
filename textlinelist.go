@@ -215,6 +215,9 @@ func (tl *TextLineList)Draw(scr tcell.Screen) {
     x += 1
     w -= 2 // for cursor and scroll bar
     h -= 1 // for button
+    if h > len(tl.items) {
+	h = len(tl.items)
+    }
     hdr := 0
     btm := y + h
     if tl.header != nil {
