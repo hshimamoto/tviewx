@@ -21,6 +21,7 @@ type TabPanel struct {
     items []TabPanelItem
     cur int
     tabFocused bool
+    tabChangedFunc func(int, string, Primitive)
     hasFocus bool
     focusBackword bool
     blurFunc func(tcell.Key)
@@ -59,6 +60,15 @@ func (tp *TabPanel)GetCurrentItem() (string, tview.Primitive) {
     }
     it := tp.items[tp.cur]
     return it.Name, it.Item
+}
+
+func (tp *TabPanel)GetTabChangedFunc() func(int, string, Primitive) {
+    return tp.tabChangedFunc
+}
+
+func (tp *TabPanel)SetTabChangedFunc(f func(int, string, Primitive)) *TabPanel {
+    tp.tabChangedFunc = f
+    return tp
 }
 
 func (tp *TabPanel)Draw(scr tcell.Screen) {
@@ -138,6 +148,11 @@ func (tp *TabPanel)Focus(delegate func(tview.Primitive)) {
 	return
     }
     tp.hasFocus = true
+    // get focus means tab focused
+    if tp.tabChangedFunc != nil {
+	it := tp.items[tp.cur]
+	tp.tabChangedFunc(tp.cur, it.Name, it.Item)
+    }
 }
 
 func (tp *TabPanel)HasFocus() bool {
@@ -147,12 +162,20 @@ func (tp *TabPanel)HasFocus() bool {
 func (tp *TabPanel)tabForward() {
     if tp.cur < (len(tp.items) - 1) {
 	tp.cur++
+	if tp.tabChangedFunc != nil {
+	    it := tp.items[tp.cur]
+	    tp.tabChangedFunc(tp.cur, it.Name, it.Item)
+	}
     }
 }
 
 func (tp *TabPanel)tabBackward() {
     if tp.cur > 0 {
 	tp.cur--
+	if tp.tabChangedFunc != nil {
+	    it := tp.items[tp.cur]
+	    tp.tabChangedFunc(tp.cur, it.Name, it.Item)
+	}
     }
 }
 

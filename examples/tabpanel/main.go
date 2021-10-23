@@ -56,13 +56,22 @@ func main() {
     in_tabpanel.AddItem("TAB5", tviewx.NewButton("Button5"))
     in_tabpanel.AddItem("TAB6", tviewx.NewButton("Button6"))
 
+    // count
+    // there are 5 tabs "Tab1" to "Tab5"
+    counts := [5]int{0, 0, 0, 0, 0}
+    tabpanel.SetTabChangedFunc(func(idx int, name string, item tviewx.Primitive) {
+	counts[idx]++
+    })
+
     // dynamic header change
     header.SetDynamic(func(idx int, orig string) string {
 	if idx != 0 {
 	    return orig
 	}
 	name, _ := tabpanel.GetCurrentItem()
-	return fmt.Sprintf("Current:%s", name)
+	return fmt.Sprintf("Current:%s %d %d %d %d %d",
+		name,
+		counts[0], counts[1], counts[2], counts[3], counts[4])
     })
 
     app.SetRoot(flex, true)
