@@ -12,7 +12,7 @@ import (
 )
 
 type TabPanelItem struct {
-    Item tview.Primitive
+    Item Primitive
     Name string
 }
 
@@ -41,7 +41,7 @@ func (tp *TabPanel)SetTabLocationTop(top bool) *TabPanel {
     return tp
 }
 
-func (tp *TabPanel)AddItem(name string, p tview.Primitive) *TabPanel {
+func (tp *TabPanel)AddItem(name string, p Primitive) *TabPanel {
     item := TabPanelItem{
 	Item: p,
 	Name: name,
@@ -50,7 +50,7 @@ func (tp *TabPanel)AddItem(name string, p tview.Primitive) *TabPanel {
     return tp
 }
 
-func (tp *TabPanel)GetCurrentItem() (string, tview.Primitive) {
+func (tp *TabPanel)GetCurrentItem() (string, Primitive) {
     if len(tp.items) == 0 {
 	return "none", nil
     }
