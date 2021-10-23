@@ -4,6 +4,9 @@
 package main
 
 import (
+    "fmt"
+    "time"
+
     "github.com/rivo/tview"
     "github.com/hshimamoto/tviewx"
 )
@@ -19,5 +22,18 @@ func main() {
     text.SetSeparator("[green::b]" + string(tview.Borders.Vertical))
     text.GetItem(2).SetDynamicColors(true).SetText("[yellow::b]0123456789")
     text.ReplaceTexts(3, []string{"DDDDD", "EEEEE", "FFFFF"})
-    tviewx.NewApplication().SetRoot(text, true).Run()
+    text.SetDynamic(func(idx int, orig string) string {
+	if idx == 0 {
+	    return fmt.Sprintf("%d", time.Now().Unix())
+	}
+	return orig
+    })
+    app := tviewx.NewApplication()
+    go func() {
+	for {
+	    time.Sleep(time.Second)
+	    app.QueueUpdateDraw(func(){})
+	}
+    }()
+    app.SetRoot(text, true).Run()
 }

@@ -18,6 +18,7 @@ type TextLine struct {
     items []*textlineItem
     textcolor tcell.Color
     separator string
+    dynamic func(int, string) string
 }
 
 func NewTextLine() *TextLine {
@@ -69,6 +70,15 @@ func (t *TextLine)SetSeparator(sep string) *TextLine {
     return t
 }
 
+func (t *TextLine)GetDynamic() func(int, string) string {
+    return t.dynamic
+}
+
+func (t *TextLine)SetDynamic(dyn func(int, string) string) *TextLine {
+    t.dynamic = dyn
+    return t
+}
+
 func (t *TextLine)Draw(scr tcell.Screen) {
     t.Box.Draw(scr)
     x, y, w, _ := t.GetInnerRect()
@@ -76,14 +86,21 @@ func (t *TextLine)Draw(scr tcell.Screen) {
     cx := x
     tview.Print(scr, t.separator, cx, y, 1, tview.AlignCenter, t.textcolor)
     cx += 1
-    for _, ti := range t.items {
+    for i, ti := range t.items {
 	bw := ti.size
 	if cx + bw >= rightLimit - 1 {
 	    bw = rightLimit - 1 - cx
 	}
 	ti.SetRect(cx, y, bw, 1)
 	ti.SetTextColor(t.textcolor)
-	ti.Draw(scr)
+	if t.dynamic != nil {
+	    orig := ti.GetText(false)
+	    ti.SetText(t.dynamic(i, orig))
+	    ti.Draw(scr)
+	    ti.SetText(orig)
+	} else {
+	    ti.Draw(scr)
+	}
 	cx += bw
 	tview.Print(scr, t.separator, cx, y, 1, tview.AlignCenter, t.textcolor)
 	if cx >= rightLimit {
