@@ -138,7 +138,7 @@ func (f *Flex)Focus(delegate func(p tview.Primitive)) {
 	    cur := f.focused
 	    n := (cur + i + sz) % sz
 	    for n != cur {
-		if (n == 0 && i == 1) || (n == (sz - 1) && i == -1) {
+		if (n == 0 && i == 1) || (n == 0 && i == -1) {
 		    if f.tryBlur(key) {
 			return
 		    }
