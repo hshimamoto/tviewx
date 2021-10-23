@@ -14,9 +14,14 @@ func main() {
 
     app := tviewx.NewApplication()
 
+    w, _ := tviewx.GetCurrentScreenSize()
+    header := tviewx.NewTextLine()
+    header.AddText("Header", w)
+
     tabpanel := tviewx.NewTabPanel()
     flex := tviewx.NewFlexRow()
     flex.SetBorder(true)
+    flex.AddItem(header, 1, 0, false)
     flex.AddItem(tabpanel, 0, 1, true)
 
     tabpanel.AddItem("Tab1", tviewx.NewButton("Tab1"))
@@ -50,6 +55,15 @@ func main() {
 
     in_tabpanel.AddItem("TAB5", tviewx.NewButton("Button5"))
     in_tabpanel.AddItem("TAB6", tviewx.NewButton("Button6"))
+
+    // dynamic header change
+    header.SetDynamic(func(idx int, orig string) string {
+	if idx != 0 {
+	    return orig
+	}
+	name, _ := tabpanel.GetCurrentItem()
+	return fmt.Sprintf("Current:%s", name)
+    })
 
     app.SetRoot(flex, true)
 

@@ -49,6 +49,18 @@ func (tp *TabPanel)AddItem(name string, p tview.Primitive) *TabPanel {
     return tp
 }
 
+func (tp *TabPanel)GetCurrentItem() (string, tview.Primitive) {
+    if len(tp.items) == 0 {
+	return "none", nil
+    }
+    if tp.cur < 0 || tp.cur >= len(tp.items) {
+	// something wrong
+	return "bad", nil
+    }
+    it := tp.items[tp.cur]
+    return it.Name, it.Item
+}
+
 func (tp *TabPanel)Draw(scr tcell.Screen) {
     tp.Box.Draw(scr)
     x, y, w, h := tp.GetInnerRect()
