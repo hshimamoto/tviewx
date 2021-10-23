@@ -5,7 +5,12 @@ package tviewx
 
 import (
     "github.com/gdamore/tcell/v2"
+    "github.com/rivo/tview"
 )
+
+type Primitive interface {
+    tview.Primitive
+}
 
 type BlurFunc interface {
     GetBlurFunc() func(tcell.Key)
