@@ -19,4 +19,4 @@ Components
 
 License
 -------
-MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
+MIT License Copyright(c) 2020, 2021, 2022 Hiroshi Shimamoto

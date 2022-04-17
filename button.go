@@ -1,5 +1,5 @@
 // tviewx.ButtonPanel
-// MIT License Copyright(c) 2020, 2021 Hiroshi Shimamoto
+// MIT License Copyright(c) 2020, 2021, 2022 Hiroshi Shimamoto
 // vim: set sw=4 sts=4:
 package tviewx
 
@@ -31,7 +31,7 @@ func (b *Button)InputHandler() func(*tcell.EventKey, func(tview.Primitive)) {
 }
 
 func (b *Button)SetBlurFunc(handler func(tcell.Key)) {
-    b.Button.SetBlurFunc(handler)
+    b.Button.SetExitFunc(handler)
     b.blurFunc = handler
 }
 
